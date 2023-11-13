@@ -1,0 +1,25 @@
+/* Apply combined styles to the body */
+body {
+    background-color: #ffffff; /* Updated background color */
+    font-family: 'Permanent Marker', sans-serif; /* Fun font */
+    text-align: center;
+}
+
+/* Style header */
+h1 {
+    color: rgb(0, 0, 0);
+    font-size: 80px;
+    margin-top: 40px;
+}
+
+/* Style paragraph */
+p {
+    color: rgb(3, 0, 0);
+    font-size: 18px;
+    margin: 20px 0;
+}
+#preview {
+    max-width: 300px;  /* or change if its too small */
+    max-height: 200px; /* or change if its too small */
+    display: none;
+}

@@ -1,21 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const upload = multer({ dest: './upload' });
 const mongoose = require('mongoose');
 const JunkModel = require('./database'); // Assuming database.js is in the same directory as server.js
 const Schema = mongoose.Schema;
 
 const app = express();
 const PORT = 3000;
-const upload = multer({ dest: 'uploads/' });
+
+// Require your database configuration file
+require('./database'); // This file will handle connecting to MongoDB
+
+// Serve static files from 'uploads' directory
+app.use('/upload', express.static('upload'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Connection to MongoDB here...
-mongoose.connect('mongodb://localhost:27017/junkHaulDB', { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => console.log('Connected to MongoDB!'))
-.catch(error => console.error('Could not connect to MongoDB: ', error));
 
 const junkSchema = new Schema({
   name: String,
@@ -32,19 +33,20 @@ app.post('/upload', upload.single('file'), (req, res) => {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    address: req.body.address,
     zipcode: req.body.zipcode,
     file: req.file.path // storing the file path in the database
   });
- 
-  const JunkModel = mongoose.model('Junk', junkSchema);
-  
+
   newEntry.save((err, entry) => {
-    if (err) return res.status(500).send(err);
-    res.status(200).send('Data saved successfully');
+    if (err) {
+      // If an error occurs, send a 500 error response
+      return res.status(500).send(err);
+    }
+    // If successful, send a 200 success response
+    res.status(200).send('File uploaded and data saved successfully');
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log(`Server is running on http://localhost:${3000}`);
 });
